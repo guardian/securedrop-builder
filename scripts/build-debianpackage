@@ -43,7 +43,7 @@ mkdir -p "${TOP_BUILDDIR}/${PKG_NAME}"
 
 # Look up most recent release from GitHub repo
 function find_latest_version() {
-    repo_url="https://github.com/freedomofpress/${PKG_NAME}/tags"
+    repo_url="https://github.com/guardian/${PKG_NAME}/tags"
     curl -s "$repo_url" \
         | perl -nE '$_ =~ m#/releases/tag/(v?[\d\.]+)\"# and say $1' \
         | head -n 1
@@ -67,7 +67,8 @@ function verify_git_tag() {
     local t
     d="$1"
     t="$2"
-    prod_fingerprint="2359E6538C0613E652955E6C188EDD3B7B22E6A3"
+    prod_fingerprint="1B721D602DD9813073260BC0E6AA23EE16086F2D"
+    git -C "$d" tag --verify "$t"
     if ! git -C "$d" tag --verify "$t" 2>&1 \
         | grep -q -F "using RSA key $prod_fingerprint" ; then
         echo "Failed to verify $t, not signed with $prod_fingerprint" >&2
@@ -77,7 +78,7 @@ function verify_git_tag() {
 
 # Clone and checkout the source
 function setup_source_tree() {
-    repo_url="https://github.com/freedomofpress/${PKG_NAME}"
+    repo_url="https://github.com/guardian/${PKG_NAME}"
     build_dir="/tmp/${PKG_NAME}"
     rm -rf "$build_dir"
     git clone "$repo_url" "$build_dir"
@@ -169,6 +170,9 @@ dpkg-buildpackage -us -uc
 pkg_path="$(find "$TOP_BUILDDIR" -type f -iname "${PKG_NAME}_${PKG_VERSION}*.deb" | head -n1)"
 if [[ -f "$pkg_path" ]]; then
     echo "Package location: $pkg_path"
+
+    echo "Attempting to publish package"
+    "$CUR_DIR/guardian-release/publish-securedrop.sh" $PKG_VERSION $pkg_path
 else
     echo "Could not find package, look in $TOP_BUILDDIR"
 fi

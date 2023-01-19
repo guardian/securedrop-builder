@@ -7,7 +7,7 @@ Standards-Version: 3.9.8
 Homepage: https://github.com/freedomofpress/securedrop-client
 X-Python3-Version: >= 3.5
 
-Package: gu-securedrop-client
+Package: securedrop-client
 Architecture: all
 Depends: ${python3:Depends},${misc:Depends}, python3-pyqt5, python3-pyqt5.qtsvg, apparmor-utils
 Description: guardian fork of securedrop client for qubes workstation

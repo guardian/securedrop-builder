@@ -167,7 +167,7 @@ export SOURCE_DATE_EPOCH
 dpkg-buildpackage -us -uc
 
 # Tell the user the path of the files built
-pkg_path="$(find "$TOP_BUILDDIR" -type f -iname "gu-${PKG_NAME}_${PKG_VERSION}*.deb" | head -n1)"
+pkg_path="$(find "$TOP_BUILDDIR" -type f -iname "${PKG_NAME}_${PKG_VERSION}*.deb" | head -n1)"
 if [[ -f "$pkg_path" ]]; then
     echo "Package location: $pkg_path"
 else

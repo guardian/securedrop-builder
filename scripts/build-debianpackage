@@ -172,7 +172,7 @@ if [[ -f "$pkg_path" ]]; then
     echo "Package location: $pkg_path"
 
     echo "Attempting to publish package"
-    "$TOP_BUILDDIR/publish-securedrop.sh" $KEY_LOCATION $pkg_path
+    "$CUR_DIR/publish-securedrop.sh" $KEY_LOCATION $pkg_path
 else
     echo "Could not find package, look in $TOP_BUILDDIR"
 fi

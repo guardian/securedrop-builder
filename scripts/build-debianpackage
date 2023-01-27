@@ -67,7 +67,7 @@ function verify_git_tag() {
     local t
     d="$1"
     t="$2"
-    prod_fingerprint="1B721D602DD9813073260BC0E6AA23EE16086F2D"
+    prod_fingerprint="080952870D9C91C79D4EAC3C3C882CB4C94603C5"
     git -C "$d" tag --verify "$t"
     if ! git -C "$d" tag --verify "$t" 2>&1 \
         | grep -q -F "using RSA key $prod_fingerprint" ; then

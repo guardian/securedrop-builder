@@ -281,3 +281,12 @@ TODO
 ## Intro to packaging
 
 For an introduction to packaging Python projects into Debian packages, one can see the [SecureDrop Debian Packaging Guide](https://securedrop-debian-packaging-guide.readthedocs.io/en/latest/). Note that these guidelines on Read the Docs are for educational purposes only. The README you are currently reading is the canonical reference for SecureDrop Workstation packagers.
+
+## Releasing guardian fork
+ - SSH onto the relevant securedrop-workstation-build server. These should be set up with securedrop-builder checked out
+   and steps 0,1,2 from [above](https://github.com/guardian/securedrop-builder#0-enable-the-virtualenv) complete
+ - cd securedrop-builder
+ - Run ./scripts/update-changelog securedrop-client and save a new changelog message
+ - If you are building a feature branch run `PKG_GITREF=branch-name make securedrop-client`
+ - If you are building a release you will need to have pushed a git tag in securedrop-client signed with the key
+   referenced by prod_fingerprint in `scripts/build-debianpackage`. Then run `PKG_VERSION=release-tag-id make securedrop-client`

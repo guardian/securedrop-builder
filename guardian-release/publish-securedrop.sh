@@ -32,8 +32,6 @@ if [ -z "$SIGNING_KEY_SECRET_ID" ]; then
   print_usage_and_exit
 fi
 
-# Fetch signing key
-aws secretsmanager get-secret-value --region eu-west-1 --secret-id "$SIGNING_KEY_SECRET_ID" | jq .SecretString -r > /tmp/private.asc
 
 REPO_NAME="gu-securedrop"
 SNAPSHOT_NAME="$REPO_NAME-$VERSION"
@@ -46,9 +44,14 @@ aptly repo drop -force "$REPO_NAME" || true
 aptly publish drop bullseye s3:s3-endpoint: || true
 aptly snapshot drop "$SNAPSHOT_NAME" || true
 
+# Fetch signing key
+aws secretsmanager get-secret-value --region eu-west-1 --secret-id "$SIGNING_KEY_SECRET_ID" | jq .SecretString -r > /home/admin/private.asc
+
 # Import key into temporary keyring
 gpg --no-default-keyring --keyring "$KEYRING" --fingerprint
-gpg --no-default-keyring  --keyring "$KEYRING" --import /tmp/private.asc
+gpg --no-default-keyring --pinentry loopback --keyring "$KEYRING" --import /home/admin/private.asc
+
+rm /home/admin/private.asc
 
 # Publish debs to S3
 aptly repo create -distribution=bullseye -component=main "$REPO_NAME"
@@ -58,4 +61,3 @@ aptly publish snapshot -config=$SCRIPT_PATH/aptly.conf -keyring="$KEYRING" "$SNA
 
 # Remove temporary keyring
 rm ~/.gnupg/temp-keyring.gpg
-rm /tmp/private.asc

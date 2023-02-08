@@ -172,7 +172,7 @@ if [[ -f "$pkg_path" ]]; then
     echo "Package location: $pkg_path"
 
     echo "Attempting to publish package"
-    "$CUR_DIR/guardian-release/publish-securedrop.sh" $PKG_VERSION $pkg_path
+    "$CUR_DIR/guardian-release/publish-securedrop.sh" $PKG_VERSION $pkg_path $SIGNING_KEY_SECRET_ID
 else
     echo "Could not find package, look in $TOP_BUILDDIR"
 fi

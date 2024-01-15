@@ -64,6 +64,9 @@ aptly repo create -distribution=bullseye -component=main "$REPO_NAME"
 aptly repo add "$REPO_NAME" "$DEB_LOCATION"
 aptly snapshot create "$SNAPSHOT_NAME" from repo "$REPO_NAME"
 
+# TODO - we're specifying keyring but not key id here. If there is more than one
+# key in the keyring, we could publish with the wrong one!
+# We need to specify key id. See https://github.com/guardian/whistleflow/pull/79
 aptly publish snapshot -keyring="$KEYRING" "$SNAPSHOT_NAME" s3:guardian-securedrop-repo:
 
 # Remove temporary keyring
